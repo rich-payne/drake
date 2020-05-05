@@ -307,6 +307,9 @@ drake_plan <- function(
   plan <- weak_tibble(target = targets)
   plan$command <- commands
   plan <- parse_custom_plan_columns(plan, envir = envir)
+  if (tidy_eval) {
+    plan <- tidyeval_cols(plan, envir = envir)
+  }
   if (transform && ("transform" %in% colnames(plan))) {
     plan <- transform_plan_(
       plan = plan,
@@ -316,9 +319,6 @@ drake_plan <- function(
       tidy_eval = FALSE,
       sanitize = FALSE
     )
-  }
-  if (tidy_eval) {
-    plan <- tidyeval_cols(plan, envir = envir)
   }
   sanitize_plan(plan, envir = envir)
 }
